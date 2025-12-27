@@ -31,7 +31,7 @@ func artistsHandler(w http.ResponseWriter, r *http.Request) {
 
 	decoder := json.NewDecoder(res.Body)
 	defer res.Body.Close()
-	//var artists []interface{}
+	// var artists []interface{}
 	var artists []Artist
 	err = decoder.Decode(&artists)
 	t, _ := template.ParseFiles("templates/artists.html")
@@ -40,11 +40,35 @@ func artistsHandler(w http.ResponseWriter, r *http.Request) {
 	}{
 		Artists: artists,
 	})
-	//fmt.Fprintf(w, "%s", artists[1])
+	// fmt.Fprintf(w, "%s", artists[1])
+}
+
+func artistHandler(w http.ResponseWriter, r *http.Request) {
+	res, err := http.Get(fmt.Sprintf("%s/artists", API))
+	if err != nil {
+		log.Fatal(err)
+		// exits the server ?!
+	}
+
+	decoder := json.NewDecoder(res.Body)
+	defer res.Body.Close()
+	// var artists []interface{}
+	var artists []Artist
+	err = decoder.Decode(&artists)
+	t, _ := template.ParseFiles("templates/artists.html")
+	t.Execute(w, struct {
+		Artists []Artist
+	}{
+		Artists: artists,
+	})
+	// fmt.Fprintf(w, "%s", artists[1])
+
 }
 
 func main() {
 	http.HandleFunc("/artists", artistsHandler)
+	http.HandleFunc("/artist/{id}", artistHandler)
+
 	log.Println("Server listening on port 8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }

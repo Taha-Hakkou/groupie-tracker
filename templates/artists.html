@@ -4,9 +4,11 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Artist Groups</title>
+    <title>Groupie Tracker</title>
 
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=New+Rocker&display=swap');
+
         :root {
             --bg: #0f172a;
             --card-bg: #111827;
@@ -20,6 +22,12 @@
             margin: 0;
             padding: 0;
             font-family: "Inter", system-ui, sans-serif;
+        }
+
+        .new-rocker-regular {
+            font-family: "New Rocker", system-ui;
+            font-weight: 400;
+            font-style: normal;
         }
 
         body {
@@ -126,17 +134,17 @@
 
 <body>
 
-    <h1>Artist Groups</h1>
+    <h1 class="new-rocker-regular">Groupie Tracker</h1>
 
     <div class="grid">
 
         {{ range .Artists }}
         <!-- Artist Card -->
         <div class="card">
-            <img src="https://via.placeholder.com/600x400" alt="Artist Image">
+            <img src="{{.Image}}" alt="{{.Name}}">
 
             <div class="card-content">
-                <h2>{{.Name}}</h2>
+                <h2 class="new-rocker-regular">{{.Name}}</h2>
 
                 <div class="meta">
                     Formed in 2005 · First album: "Echoes"
@@ -145,22 +153,22 @@
                 <div class="section">
                     <h3>Members</h3>
                     <div class="members">
-                        <span class="member">Alice</span>
-                        <span class="member">Bob</span>
-                        <span class="member">Charlie</span>
+                        {{range .Members}}
+                        <span class="member">{{.}}</span>
+                        {{end}}
                     </div>
                 </div>
 
-                <div class="section links">
+                <!--div class="section links">
                     <span><strong>Locations:</strong> World Tour</span>
                     <span><strong>Concert Dates:</strong> 2024–2025</span>
                     <span><strong>Relations:</strong> example.com</span>
-                </div>
+                </div-->
             </div>
         </div>
 
         <!-- Duplicate cards as needed -->
-         {{end}}
+        {{end}}
 
     </div>
 
