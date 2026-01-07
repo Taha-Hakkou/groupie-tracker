@@ -2,52 +2,50 @@ package utils
 
 import (
 	"encoding/json"
-	"fmt"
 	"groupie-tracker/structures"
 	"net/http"
 	"slices"
 )
 
-func ExtractEvents(artist *structures.Artist) (*structures.Artist, error) {
+func ExtractEvents(artist structures.Artist) (structures.Artist, error) {
 	//get locationObject
 	resp, err := http.Get(artist.LocationsApi)
 	if err != nil {
-		return artist, err
+		return structures.Artist{}, err
 	}
 	decoder := json.NewDecoder(resp.Body)
 	locationObject := structures.LocationObject{}
 	err = decoder.Decode(&locationObject)
 	if err != nil {
-		return artist, err
+		return structures.Artist{}, err
 	}
 	resp.Body.Close()
-	fmt.Printf("%#v\n\n", locationObject)
 	//get dateObject
 	resp, err = http.Get(artist.DatesApi)
 	if err != nil {
-		return artist, err
+		return structures.Artist{}, err
 	}
 	decoder = json.NewDecoder(resp.Body)
 	dateObject := structures.DateObject{}
 	err = decoder.Decode(&dateObject)
 	if err != nil {
-		return artist, err
+		return structures.Artist{}, err
 	}
 	resp.Body.Close()
-	fmt.Printf("%#v\n\n", dateObject)
+	//format dates
+	dateObject.Dates = formatDates(dateObject.Dates)
 	//get relationObject
 	resp, err = http.Get(artist.RelationApi)
 	if err != nil {
-		return artist, err
+		return structures.Artist{}, err
 	}
 	decoder = json.NewDecoder(resp.Body)
 	relationObject := structures.RelationObject{}
 	err = decoder.Decode(&relationObject)
 	if err != nil {
-		return artist, err
+		return structures.Artist{}, err
 	}
 	resp.Body.Close()
-	fmt.Printf("%#v\n\n", relationObject)
 	//----------------------------------------
 	//populate events
 	for location, dates := range relationObject.LocationsDates {
@@ -56,7 +54,6 @@ func ExtractEvents(artist *structures.Artist) (*structures.Artist, error) {
 			continue
 		}
 		event := structures.Event{Location: location}
-
 		for _, date := range dates {
 			//match the relation location->date against the dates slice
 			if !slices.Contains(dateObject.Dates, date) {
@@ -70,6 +67,17 @@ func ExtractEvents(artist *structures.Artist) (*structures.Artist, error) {
 		}
 		artist.Events = append(artist.Events, event)
 	}
-	fmt.Println(artist)
 	return artist, nil
+}
+
+func formatDate(date string) string {
+	dateRunes := []rune(date)
+	newDateRunes := dateRunes[1:]
+	return string(newDateRunes)
+}
+func formatDates(dates []string) []string {
+	for i := 0; i < len(dates); i++ {
+		dates[i] = formatDate(dates[i])
+	}
+	return dates
 }

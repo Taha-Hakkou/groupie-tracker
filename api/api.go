@@ -2,7 +2,6 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
 	"groupie-tracker/structures"
 	"groupie-tracker/utils"
 	"net/http"
@@ -37,10 +36,9 @@ func GetArtistDetails(id string) (structures.Artist, error) {
 	if err != nil {
 		return structures.Artist{}, err
 	}
-	populatedArtist, err := utils.ExtractEvents(&artist)
+	populatedArtist, err := utils.ExtractEvents(artist)
 	if err != nil {
 		return structures.Artist{}, err
 	}
-	fmt.Printf("\n\n\n\n%#v", populatedArtist)
-	return structures.Artist{}, nil
+	return populatedArtist, nil
 }
