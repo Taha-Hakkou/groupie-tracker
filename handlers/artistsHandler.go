@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"groupie-tracker/api"
 	"html/template"
 	"net/http"
@@ -19,7 +18,11 @@ func ArtistsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	//get artists from api
-	artists := api.GetArtists()
+	artists, err := api.GetArtists()
+	if err != nil {
+		http.Error(w, "404 not found", http.StatusNotFound)
+		return
+	}
 	//parse template
 	tmpl, err := template.ParseFiles("templates/artists.html")
 	if err != nil {
@@ -28,8 +31,6 @@ func ArtistsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	//execute template
 	err = tmpl.Execute(w, artists)
-	if err != nil {
-		fmt.Println(err)
-	}
+	//to handle with buffer or not !!!!!!!!!!!!
 
 }

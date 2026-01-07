@@ -5,12 +5,12 @@ type Artist struct {
 	Image        string
 	Name         string
 	Members      []string
-	CreationDate int     `json:"creationDate"`
-	FirstAlbum   string  `json:"firstAlbum"`
+	CreationDate int
+	FirstAlbum   string
 	LocationsApi string  `json:"locations"`
 	DatesApi     string  `json:"concertDates"`
 	RelationApi  string  `json:"relations"`
-	events       []Event `json:"-"`
+	Events       []Event `json:"-"`
 }
 
 type Event struct {
@@ -27,5 +27,5 @@ type DateObject struct {
 }
 
 type RelationObject struct {
-	LocationsDates map[string][]string
+	LocationsDates map[string][]string `json:"datesLocations"`
 }
