@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>artist details</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body class="home-page">
+    <div>
+      <img src="{{.Image}}" alt="{{.Name}} band image" />
+      <p>{{.Name}}</p>
+      <p>{{.CreationDate}}</p>
+      <p>{{.FirstAlbum}}</p>
+      {{ range .Members}}
+      <p>{{.}}</p>
+      {{end}}
+      {{ range .Events}}
+      <p>{{.Location}}</p>
+      {{range .Dates}}
+      {{.}}
+      {{end}}
+      {{end}}
+    </div>
+  </body>
+</html>

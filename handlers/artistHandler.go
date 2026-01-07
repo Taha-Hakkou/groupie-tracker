@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"groupie-tracker/api"
+	"html/template"
 	"net/http"
 )
 
@@ -14,10 +15,17 @@ func ArtistHandler(w http.ResponseWriter, r *http.Request) {
 	//extract parameter
 	stringId := r.PathValue("id")
 	//get artist from api
-	_, err := api.GetArtistDetails(stringId)
+	artist, err := api.GetArtistDetails(stringId)
 	if err != nil {
 		http.Error(w, "404 not found", http.StatusNotFound)
 		return
 	}
-
+	//parse file
+	tmpl, err := template.ParseFiles("templates/artist-details.html")
+	if err != nil {
+		http.Error(w, "404 not found", http.StatusNotFound)
+	}
+	//execute template
+	err = tmpl.Execute(w, artist)
+	//!!!!!!!!!!!!!!!!
 }

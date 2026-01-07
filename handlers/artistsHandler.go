@@ -23,7 +23,7 @@ func ArtistsHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "404 not found", http.StatusNotFound)
 		return
 	}
-	//parse template
+	//parse file
 	tmpl, err := template.ParseFiles("templates/artists.html")
 	if err != nil {
 		http.Error(w, "404 not found", http.StatusNotFound)
