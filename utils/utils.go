@@ -5,6 +5,7 @@ import (
 	"groupie-tracker/structures"
 	"net/http"
 	"slices"
+	"strings"
 )
 
 func ExtractEvents(artist structures.Artist) (structures.Artist, error) {
@@ -71,9 +72,12 @@ func ExtractEvents(artist structures.Artist) (structures.Artist, error) {
 }
 
 func formatDate(date string) string {
-	dateRunes := []rune(date)
-	newDateRunes := dateRunes[1:]
-	return string(newDateRunes)
+	if strings.HasPrefix(date, "*") {
+		dateRunes := []rune(date)
+		newDateRunes := dateRunes[1:]
+		return string(newDateRunes)
+	}
+	return date
 }
 func formatDates(dates []string) []string {
 	for i := 0; i < len(dates); i++ {

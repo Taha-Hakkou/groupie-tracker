@@ -1,23 +1,36 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <link rel="stylesheet" href="/style.css" />
-    <title>artists</title>
-  </head>
-
-  <body class="home-page">
-    {{ range .}}
-    <a href="/{{.Id}}">
-      <img src="{{.Image}}" alt="{{.Name}} band image" />
-      <p>{{.Name}}</p>
-      <p>{{.CreationDate}}</p>
-      <p>{{.FirstAlbum}}</p>
-      <p>{{.LocationsApi}}</p>
-      <p>{{.DatesApi}}</p>
-      <p>{{.RelationApi}}</p>
-      {{ range .Members}}
-      <p>{{.}}</p>
-      {{end}} {{end}}
-    </a>
-  </body>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Groupie Tracker</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <header>
+        <h1 class="new-rocker-regular">Groupie Tracker</h1>
+    </header>
+    
+    <div class="grid">
+        {{ range . }}
+        <a class="card" href="/{{.Id}}">
+            <img src="{{.Image}}" alt="{{.Name}}">
+            <div class="card-content">
+                <h2 class="new-rocker-regular">{{.Name}}</h2>
+                <div class="meta">
+                    Formed in {{.CreationDate}} · First album: {{.FirstAlbum}}
+                </div>
+                <div class="section">
+                    <h3>Members</h3>
+                    <div class="members">
+                        {{range .Members}}
+                        <span class="member">{{.}}</span>
+                        {{end}}
+                    </div>
+                </div>
+            </div>
+        </a>
+        {{end}}
+    </div>
+</body>
 </html>
