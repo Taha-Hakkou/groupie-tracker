@@ -48,6 +48,7 @@ func ArtistsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// send successful response
+	w.Header().Set("Content-Type", "text/html")
 	w.WriteHeader(http.StatusOK)
 	buf.WriteTo(w)
 }
