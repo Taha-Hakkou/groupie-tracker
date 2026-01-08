@@ -6,6 +6,7 @@ import (
 	"groupie-tracker/structures"
 	"groupie-tracker/utils"
 	"net/http"
+	"strconv"
 )
 
 const api = "https://groupietrackers.herokuapp.com/api/artists"
@@ -34,6 +35,11 @@ func GetArtists() ([]structures.Artist, error) {
 
 // getArtistDetails fetches a single artist with full event details
 func GetArtistDetails(id string) (structures.Artist, error) {
+	//check if id is between 1 and 52
+	idNumber, err := strconv.Atoi(id)
+	if err != nil || (idNumber < 1 || idNumber > 52) {
+		return structures.Artist{}, fmt.Errorf("artist not found %s.", id)
+	}
 	artistEndpoint := api + "/" + id
 
 	resp, err := http.Get(artistEndpoint)
@@ -43,7 +49,7 @@ func GetArtistDetails(id string) (structures.Artist, error) {
 
 	// check for 404 or invalid artist ID
 	if resp.StatusCode == http.StatusNotFound {
-		return structures.Artist{}, fmt.Errorf("artist %s not found", id)
+		return structures.Artist{}, fmt.Errorf("artist not found %s.", id)
 	}
 
 	if resp.StatusCode != http.StatusOK {
@@ -57,7 +63,6 @@ func GetArtistDetails(id string) (structures.Artist, error) {
 	if err != nil {
 		return structures.Artist{}, fmt.Errorf("failed to decode artist %s.", id)
 	}
-
 	// populate events with locations and dates
 	populatedArtist, err := utils.ExtractEvents(artist)
 	if err != nil {

@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"strings"
 )
 
 // artistHandler displays individual artist details
@@ -24,7 +25,7 @@ func ArtistHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println(err)
 		//if artist is not found
-		if err.Error() == "artist not found." {
+		if strings.HasPrefix(err.Error(), "artist not found") {
 			renderError(w, "Artist not found.", http.StatusNotFound)
 			return
 		}
